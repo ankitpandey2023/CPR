@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinical Resuscitation & CPR Training - ED Nursing Staff</title>
+    <!-- Fonts: Premium modern medical typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        medical: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            200: '#fecdd3',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                            700: '#be123c',
+                            800: '#9f1239',
+                            900: '#4c0519',
+                        },
+                        slate: {
+                            950: '#030712'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom slide transition structures */
+        .slide-track {
+            display: flex;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 100%;
+        }
+        .slide-frame {
+            flex: 0 0 100%;
+            height: 100%;
+            overflow-y: auto;
+            position: relative;
+        }
+        /* Custom scrollbar for clean presentation look */
+        .slide-frame::-webkit-scrollbar {
+            width: 6px;
+        }
+        .slide-frame::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .slide-frame::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        /* Pulse Animation for metronome */
+        @keyframes ring-pulse {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 0.4; }
+            100% { transform: scale(1.15); opacity: 0; }
+        }
+        .pulse-effect {
+            animation: ring-pulse 0.54s infinite;
+        }
+
+        /* Pseudo-fullscreen fallback when native browser fullscreen is disallowed by policy */
+        #presentationContainer.pseudo-fullscreen {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: 100vw !important;
+            max-height: 100vh !important;
+            aspect-ratio: auto !important;
+            z-index: 99999 !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 font-sans text-slate-800 min-h-screen flex flex-col justify-between overflow-hidden">
+
+    <!-- TOP NAVIGATION & INSTITUTION HEADER -->
+    <header class="bg-slate-900 border-b border-slate-800 px-6 py-4 flex flex-wrap justify-between items-center gap-4 z-10">
+        <div class="flex items-center gap-3">
+            <div class="h-10 w-10 bg-gradient-to-tr from-medical-600 to-rose-400 rounded-lg flex items-center justify-center shadow-lg shadow-medical-500/20">
+                <i class="fa-solid fa-heart-pulse text-white text-xl animate-pulse"></i>
+            </div>
+            <div>
+                <h1 class="text-white font-display font-bold text-base tracking-wide uppercase leading-none">Charak Hospital</h1>
+                <span class="text-xs text-slate-400 font-medium">&amp; Research Center • Emergency Department (ED)</span>
+            </div>
+        </div>
+        
+        <div class="flex items-center flex-wrap gap-3">
+            <div class="flex items-center gap-6 mr-2">
+                <div class="text-right">
+                    <span class="text-xs text-slate-400 block font-medium">ED Nursing Incharge / Lead Trainer:</span>
+                    <span class="text-white text-sm font-semibold font-display"><i class="fa-solid fa-user-nurse text-medical-500 mr-1.5"></i>Geetanjali Mishra</span>
+                </div>
+                <div class="h-8 w-[1px] bg-slate-800"></div>
+            </div>
+
+            <button onclick="togglePresenterNotes()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors">
+                <i class="fa-solid fa-clipboard-question text-medical-500"></i> Clinical Notes
+            </button>
+        </div>
+    </header>
+
+    <!-- SLIDE ARENA (WIDESCREEN VIEWPORT CONTAINER) -->
+    <main class="flex-grow flex items-center justify-center p-4 relative overflow-hidden">
+        <div class="flex gap-4 w-full max-w-7xl h-full items-center justify-center">
+            
+            <!-- Slides Container (Standard 16:9 box) -->
+            <div class="w-full max-w-5xl aspect-[16/9] bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden relative transition-all duration-300" id="presentationContainer">
+                
+                <!-- Slide Track Wrapper -->
+                <div class="slide-track" id="slideTrack">
+
+                    <!-- SLIDE 1: Title Slide (Clinical Dark Theme) -->
+                    <div class="slide-frame bg-slate-950 flex flex-col justify-between p-12 text-white relative">
+                        <div class="absolute inset-0 opacity-10 pointer-events-none">
+                            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                                        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" stroke-width="1"/>
+                                    </pattern>
+                                </defs>
+                                <rect width="100%" height="100%" fill="url(#grid)" />
+                            </svg>
+                        </div>
+                        
+                        <div class="flex justify-between items-start">
+                            <span class="text-xs font-semibold uppercase tracking-widest text-medical-500 bg-medical-950/40 px-3 py-1.5 rounded-full border border-medical-900/50">ED Clinical Protocol Series</span>
+                            <span class="text-xs text-slate-400">Section 1: ED Resuscitation Excellence</span>
+                        </div>
+
+                        <div class="my-auto max-w-3xl">
+                            <span class="text-medical-500 font-display font-semibold text-lg uppercase tracking-wide block mb-3">Emergency Nursing Advanced Guidelines</span>
+                            <h1 class="text-4xl md:text-5xl font-display font-extrabold text-white tracking-tight leading-tight mb-6">
+                                Cardiopulmonary Resuscitation<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-medical-500 to-rose-400">High-Performance Nursing Protocols</span>
+                            </h1>
+                            <p class="text-slate-400 text-base md:text-lg font-normal max-w-2xl leading-relaxed">
+                                Optimizing Code Blue response, manual defibrillation, pharmacotherapy coordination, and team-based dynamics for the emergency department nursing staff.
+                            </p>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 border-t border-slate-900 pt-6">
+                            <div>
+                                <span class="text-xs text-slate-500 block">Lead Educator &amp; Nursing Incharge</span>
+                                <span class="text-white font-semibold font-display text-base">Geetanjali Mishra</span>
+                            </div>
+                            <div class="text-left sm:text-right">
+                                <span class="text-xs text-slate-500 block">Department</span>
+                                <span class="text-slate-300 font-medium text-sm">Emergency Department • Charak Hospital &amp; Research Center</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 2: Incharge Welcome and Training Intent -->
+                    <div class="slide-frame bg-slate-50 p-12 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 border-l-4 border-medical-600 pl-4 mb-6">
+                                <h2 class="text-3xl font-display font-bold text-slate-900">ED Clinical Leadership Message</h2>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center mt-4">
+                                <div>
+                                    <h3 class="text-2xl font-display font-semibold text-medical-600 mb-4">Dear ED Nursing Team,</h3>
+                                    <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                                        As your <strong class="text-slate-900 font-semibold">Nursing Incharge</strong>, I recognize that the emergency department is the absolute front line for cardiac arrest response. In our ward, a Code Blue demands immediate, flawless, and systematic team execution.
+                                    </p>
+                                    <p class="text-slate-600 text-sm leading-relaxed">
+                                        This clinical module is designed specifically for professional nurses. It moves past basic bystander rules to target closed-loop communication, drug preparation timelines, continuous ETCO2 tracking, and rapid manual shock delivery.
+                                    </p>
+                                </div>
+                                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-md flex items-center gap-5">
+                                    <div class="h-20 w-20 bg-medical-50 rounded-full flex items-center justify-center text-medical-600 text-3xl shrink-0 border-2 border-medical-100">
+                                        <i class="fa-solid fa-stethoscope"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-display font-bold text-slate-900">Emergency Focus Areas</h4>
+                                        <ul class="text-xs text-slate-500 mt-2 space-y-1.5 list-disc pl-4">
+                                            <li>AHA Adult / Pediatric ALS updates</li>
+                                            <li>Dynamic role allocation under stress</li>
+                                            <li>Defibrillator sync &amp; safe charge protocols</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-slate-400 text-xs border-t border-slate-100 pt-4">Charak Hospital ED • Geetanjali Mishra</div>
+                    </div>
+
+                    <!-- SLIDE 3: Professional Course Objectives -->
+                    <div class="slide-frame bg-slate-50 p-12 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 border-l-4 border-medical-600 pl-4 mb-6">
+                                <h2 class="text-3xl font-display font-bold text-slate-900">Professional Nursing Objectives</h2>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+                                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                                    <div class="text-medical-600 text-2xl mb-4"><i class="fa-solid fa-people-group"></i></div>
+                                    <h3 class="font-display font-bold text-slate-900 mb-2">1. Resuscitation Team Dynamics</h3>
+                                    <p class="text-slate-600 text-xs leading-relaxed">Master the 6-person resuscitation team setup. Learn to assign, step in, and transition roles seamlessly within 10 seconds of patient arrival.</p>
+                                </div>
+                                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                                    <div class="text-medical-600 text-2xl mb-4"><i class="fa-solid fa-syringe"></i></div>
+                                    <h3 class="font-display font-bold text-slate-900 mb-2">2. Rapid Drug Delivery</h3>
+                                    <p class="text-slate-600 text-xs leading-relaxed">Establish rapid IV/IO access, coordinate epinephrine intervals of 3–5 minutes, and prepare antiarrhythmics without breaking the chest compression loop.</p>
+                                </div>
+                                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                                    <div class="text-medical-600 text-2xl mb-4"><i class="fa-solid fa-chart-line"></i></div>
+                                    <h3 class="font-display font-bold text-slate-900 mb-2">3. Advanced Diagnostics</h3>
+                                    <p class="text-slate-600 text-xs leading-relaxed">Track capnography (ETCO2) changes, identify shockable vs. non-shockable ECG rhythms instantly, and scan for the 10 reversible causes (5 H's &amp; 5 T's).</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-slate-400 text-xs border-t border-slate-100 pt-4">Charak Hospital ED • Resuscitation Goals</div>
+                    </div>
+
+                    <!-- SLIDE 4: Shockable vs. Non-Shockable Monitor Screens -->
+                    <div class="slide-frame bg-slate-50 p-12 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 border-l-4 border-medical-600 pl-4 mb-6">
+                                <h2 class="text-3xl font-display font-bold text-slate-900">Rhythm Identification on the ED Monitor</h2>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
+                                <div class="bg-slate-950 p-5 rounded-xl border border-slate-800">
+                                    <span class="bg-rose-950 text-rose-400 border border-rose-900 text-[10px] font-semibold px-2.5 py-1 rounded-full uppercase tracking-wide">SHOCKABLE RHYTHMS (Defibrillation Indicated)</span>
+                                    <h3 class="text-lg font-display font-bold text-white mt-3 mb-2">VF &amp; Pulseless VT</h3>
+                                    
+                                    <!-- Shockable ECG SVG Wave -->
+                                    <svg class="w-full h-24 my-3" viewBox="0 0 300 80">
+                                        <rect width="300" height="80" rx="6" fill="#020617"/>
+                                        <path d="M 0 40 Q 15 20 30 60 T 60 20 T 90 60 T 120 15 T 150 65 T 180 10 T 210 70 T 240 25 T 270 55 T 300 35" fill="none" stroke="#f43f5e" stroke-width="2.5" />
+                                    </svg>
+                                    
+                                    <p class="text-slate-400 text-xs leading-relaxed">
+                                        Ventricular Fibrillation (chaotic wave) and Pulseless Ventricular Tachycardia (monomorphic wide complex). Prepare defibrillator immediately.
+                                    </p>
+                                </div>
+                                <div class="bg-slate-950 p-5 rounded-xl border border-slate-800">
+                                    <span class="bg-sky-950 text-sky-400 border border-sky-900 text-[10px] font-semibold px-2.5 py-1 rounded-full uppercase tracking-wide">NON-SHOCKABLE RHYTHMS (Manual CPR &amp; Epi Only)</span>
+                                    <h3 class="text-lg font-display font-bold text-white mt-3 mb-2">Asystole &amp; PEA</h3>
+                                    
+                                    <!-- Non-Shockable ECG SVG Wave -->
+                                    <svg class="w-full h-24 my-3" viewBox="0 0 300 80">
+                                        <rect width="300" height="80" rx="6" fill="#020617"/>
+                                        <path d="M 0 40 L 100 40 L 110 30 L 115 55 L 120 10 L 125 45 L 130 40 L 300 40" fill="none" stroke="#38bdf8" stroke-width="2.5" />
+                                    </svg>
+                                    
+                                    <p class="text-slate-400 text-xs leading-relaxed">
+                                        Asystole (flatline) and Pulseless Electrical Activity (organized ECG rhythm without a palpable mechanical pulse). Defibrillation is contraindicated.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-slate-400 text-xs border-t border-slate-100 pt-4">Charak Hospital ED • ECG Interpretation</div>
+                    </div>
+
+                    <!-- SLIDE 5: Physiological Target (CPP) -->
+                    <div class="slide-frame bg-slate-50 p-12 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 border-l-4 border-medical-600 pl-4 mb-6">
+                                <h2 class="text-3xl font-display font-bold text-slate-900">Physiology: Coronary Perfusion Pressure (CPP)</h2>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
+                                <div class="space-y-4">
+                                    <h3 class="text-xl font-display font-bold text-slate-800">Targeting Oxygenation of the Myocardium</h3>
+                                    <p class="text-slate-600 text-xs leading-relaxed">
+                                        The main physiological goal of chest compressions is to achieve a <strong class="text-slate-950">Coronary Perfusion Pressure (CPP) &gt; 15 mmHg</strong> (calculated as diastolic aortic pressure minus right atrial pressure).
+                                    </p>
+                                    <div class="bg-white border border-slate-200 p-4 rounded-xl flex items-center gap-4">
+                                        <div class="text-3xl text-medical-500"><i class="fa-solid fa-chart-line"></i></div>
+                                        <div>
+                                            <h4 class="font-bold text-slate-950 text-xs">CPP Building Phase</h4>
+                                            <p class="text-[10px] text-slate-500">It takes 10 to 15 continuous, deep compressions to build a protective CPP. Any pause instantly drops this pressure to zero.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- CPP Perfusion Graph SVG -->
+                                <div class="flex items-center justify-center">
+                                    <svg class="w-full max-w-[340px]" viewBox="0 0 400 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="400" height="240" rx="16" fill="#0f172a" />
+                                        <path d="M 50 190 Q 70 190 90 180 T 130 160 T 170 120 T 210 60 T 250 40 T 350 40" stroke="#f43f5e" stroke-width="3" stroke-linecap="round" />
+                                        <line x1="50" y1="120" x2="350" y2="120" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="6 4" />
+                                        <text x="340" y="110" fill="#f43f5e" font-size="10" font-family="Inter">CPP Threshold (15 mmHg)</text>
+                                        <text x="250" y="25" fill="#22c55e" font-size="10" font-family="Inter" font-weight="bold">Optimal Cerebral Blood Flow</text>
+                                        <text x="50" y="215" fill="#94a3b8" font-size="10" font-family="Inter">Start Compressions</text>
+                                        <text x="350" y="215" fill="#94a3b8" font-size="10" font-family="Inter" text-anchor="end">Cycle Complete</text>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-slate-400 text-xs border-t border-slate-100 pt-4">Charak Hospital ED • Resuscitation Physiology</div>
+                    </div>
+
+                    <!-- SLIDE 6: IHCA Chain of Survival -->
+                    <div class="slide-frame bg-slate-50 p-12 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 border-l-4 border-medical-600 pl-4 mb-6">
+                                <h2 class="text-3xl font-display font-bold text-slate-900">In-Hospital Chain of Survival (IHCA)</h2>
+                            </div>
+                            <div class="grid grid-cols-2 md:grid-cols-6 gap-3 mt-6">
+                                <div class="bg-white p-4 rounded-lg border border-slate-200 text-center flex flex-col items-center">
+                                    <div class="h-10 w-10 bg-rose-50 text-medical-600 rounded-full flex items-center justify-center mb-3"><i class="fa-solid fa-magnifying-glass-chart text-sm"></i></div>
+                                    <h4 class="text-[11px] font-bold text-slate-900 leading-tight">1. Surveillance</h4>
+                                    <p class="text-[9px] text-slate-500 mt-1">Continuous telemetry and early warning scores.</p>
+                                </div>
+                                <div class="bg-white p-4 rounded-lg border border-slate-200 text-center flex flex-col items-center">
+                                    <div class="h-10 w-10 bg-rose-50 text-medical-600 rounded-full flex items-center justify-center mb-3"><i class="fa-solid fa-bell text-sm animate-bounce"></i></div>
+                                    <h4 class="text-[11px] font-bold text-slate-900 leading-tight">2. Trigger Code</h4>
+                                    <p class="text-[9px] text-slate-500 mt-1">Immediate activation of Code Blue response.</p>
+                                </div>
+                                <div class="bg-white p-4 rounded-lg border border-slate-200 text-center flex flex-col items-center">
+                                    <div class="h-10 w-10 bg-rose-50 text-medical-600 rounded-full flex items-center justify-center mb-3"><i class="fa-solid fa-heart-circle-check text-sm"></i></div>
+                                    <h4 class="text-[11px] font-bold text-slate-900 leading-tight">3. High-Q CPR</h4>
+                                    <p class="text-[9px] text-slate-500 mt-1">Perfect mechanics to maintain CPP.</p>
+                                </div>
+                                <div class="bg-white p-4 rounded-lg border border-slate-200 text-center flex flex-col items-center">
+                                    <div class="h-10 w-10 bg-rose-50 text-medical-600 rounded-full flex items-center justify-center mb-3"><i class="fa-solid fa-bolt-lightning text-sm"></i></div>
+                                    <h4 class="text-[11px] font-bold text-slate-900 leading-tight">4. Defibrillation</h4>
+                                    <p class="text-[9px] text-slate-500 mt-1">Manual shock delivery under 2 minutes.</p>
+                                </div>
+                                <div class="bg-white p-4 rounded-lg border border-slate-200 text-center flex flex-col items-center">
+                                    <div class="h-10 w-10 bg-rose-50 text-medical-600 rounded-full flex items-center justify-center mb-3"><i class="fa-solid fa-bed-pulse text-sm"></i></div>
+                                    <h4 class="text-[11px] font-bold text-slate-900 leading-tight">5. Post-Arrest</h4>
+                                    <p class="text-[9px] text-slate-500 mt-1">Advanced ICU hemodynamic targets.</p>
+                                </div>
+                                <div class="bg-white p-4 rounded-lg border border-slate-200 text-center flex flex-col items-center">
+                                    <div class="h-10 w-10 bg-rose-50 text-medical-600 rounded-full flex items-center justify-center mb-3"><i class="fa-solid fa-house-chimney-medical text-sm"></i></div>
+                                    <h4 class="text-[11px] font-bold text-slate-900 leading-tight">6. Rehab</h4>
+                                    <p class="text-[9px] text-slate-500 mt-1">Neurological &amp; physical therapy plan.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-slate-400 text-xs border-t border-slate-100 pt-4">Charak Hospital ED • IHCA Guidelines</div>
+                    </div>
+
+                    <!-- SLIDE 7: Preparation of the Patient Bed & Environment -->
+                    <div class="slide-frame bg-slate-50 p-12 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 border-l-4 border-medical-600 pl-4 mb-6">
+                                <h2 class="text-3xl font-display font-bold text-slate-900">ED Bed Preparation &amp; Scene Optimization</h2>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center mt-4">
+                                <div class="space-y-4">
+                                    <h3 class="text-xl font-display font-bold text-slate-800">Setting Up for Success</h3>
+                                    <p class="text-slate-600 text-xs leading-relaxed">
+                                        An ED resuscitation bed requires immediate adjustment before beginning chest compressions. Resuscitating on a soft mattress significantly limits cardiac output.
+                                    </p>
+                                    <ul class="text-slate-600 text-xs space-y-2">
+                                        <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-600"></i> **Deploy CPR Board:** Instantly slide the rigid cardiac backboard under the patient's thorax.</li>
+                                        <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-600"></i> **Adjust Bed Height:** Lower the bed so the compressor's hips are above their shoulders, maximizing leverage.</li>
+                                        <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-600"></i> **Remove Headboard:** Quickly unlatch the headboard of the bed to allow easy access for airway placement.</li>
+                                    </ul>
+                                </div>
+                                <div class="flex items-center justify-center">
+                                    <!-- Backboard Placement Vector -->
+                                    <svg class="w-full max-w-[280px]" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="200" height="200" rx="20" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2" />
+                                        <rect x="30" y="110" width="140" height="15" rx="4" fill="#f59e0b" />
+                                        <path d="M 40 100 C 40 80, 160 80, 160 100" stroke="#475569" stroke-width="6" fill="none" />
+                                        <line x1="20" y1="130" x2="180" y2="130" stroke="#cbd5e1" stroke-width="8" />
+                                        <circle cx="100" cy="118" r="4" fill="#0f172a" />
+                                        <text x="100" y="160" fill="#0f172a" font-size="9" font-family="Inter" font-weight="bold" text-anchor="middle">CARDIAC BACKBOARD PLACEMENT</text>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-slate-400 text-xs border-t border-slate-100 pt-4">Charak Hospital ED • Patient Bed Setup</div>
+                    </div>
+
+                    <!-- SLIDE 8: Assessing the Patient (ED Context) -->
+                    <div class="slide-frame bg-slate-50 p-12 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 border-l-4 border-medical-600 pl-4 mb-6">
+                                <h2 class="text-3xl font-display font-bold text-slate-900">Clinical Patient Assessment</h2>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center mt-4">
+                                <div class="space-y-4">
+                                    <h3 class="text-xl font-display font-bold text-slate-800">Advanced Responsive Testing</h3>
+                                    <p class="text-slate-600 text-xs leading-relaxed">
+                                        For patients in the ED, assessment must bypass bystander verbal methods. Rapidly identify circulatory arrest with clinical markers:
+                                    </p>
+                                    <div class="bg-medical-50 border-l-4 border-medical-600 p-4 rounded-r-xl">
+                                        <p class="font-display font-bold text-medical-800 text-xs italic">
+                                            "No palpable carotid pulse &amp; agonal respirations present. Monitor shows Ventricular Fibrillation. Activate Code Blue!"
+                                        </p>
+                                    </div>
+                                    <p class="text-[10px] text-slate-500 leading-relaxed">
+                                        Immediately connect monitoring leads, check pupillary response, and prep the defibrillator pad sites on the patient's chest.
+                                    </p>
+                                </div>
+                                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-center">
+                                    <h4 class="font-bold text-slate-900 mb-3"><i class="fa-solid fa-circle-exclamation text-medical-500 mr-2"></i>Critical Diagnostic Rule</h4>
+                                    <p class="text-slate-600 text-xs leading-relaxed mb-4">
+                                        Do not spend more than 10 seconds checking pulse or breathing. If in doubt, begin chest compressions immediately. Unnecessary pauses damage tissue survival.
+                                    </p>
+                                    <span class="text-xs text-medical-600 font-bold"><i class="fa-solid fa-arrow-right mr-1"></i> Proceed to Immediate Code Allocation.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-slate-400 text-xs border-t border-slate-100 pt-4">Charak Hospital ED • Clinical Diagnostics</div>
+                    </div>
+
+                    <!-- SLIDE 9: Code Blue Role Delegation (6-Person Team) -->
+                    <div class="slide-frame bg-slate-50 p-12 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 border-l-4 border-medical-600 pl-4 mb-6">
+                                <h2 class="text-3xl font-display font-bold text-slate-900">Code Blue Team Role Assignment</h2>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
+                                <div class="space-y-4">
+                                    <h3 class="text-xl font-display font-bold text-slate-800">Resuscitation Team Hierarchy</h3>
+                                    <p class="text-slate-600 text-xs leading-relaxed">
+                                        To prevent clutter and confusion, the ED Nursing Incharge will designate roles using a closed-loop system:
+                                    </p>
+                                    <div class="bg-slate-900 text-slate-100 p-4 rounded-xl border border-slate-800 text-[11px] space-y-1">
+                                        <p class="text-medical-400 font-bold">Closed-Loop Example:</p>
+                                        <p class="italic">"Suresh, prepare 1mg Epinephrine IV now."</p>
+                                        <p class="italic text-slate-400">Response: "I will prepare 1mg Epinephrine IV now, Geetanjali."</p>
+                                    </div>
+                                </div>
+                                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                                    <h4 class="font-display font-bold text-slate-900 text-xs mb-3">ED Resuscitation Roles:</h4>
+                                    <div class="grid grid-cols-2 gap-2 text-[10px]">
+                                        <div class="bg-white p-2 rounded border border-slate-200">**1. Team Leader** (Directs team)</div>
+                                        <div class="bg-white p-2 rounded border border-slate-200">**2. Compressor** (Chest work)</div>
+                                        <div class="bg-white p-2 rounded border border-slate-200">**3. Airway Nurse** (Oxygen/BVM)</div>
+                                        <div class="bg-white p-2 rounded border border-slate-200">**4. Code Scribe** (Documentation)</div>
+                                        <div class="bg-white p-2 rounded border border-slate-200">**5. Med Nurse** (IV/IO Access/Drugs)</div>
+                                        <div class="bg-white p-2 rounded border border-slate-200">**6. Defib Nurse** (Defibrillation)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-slate-400 text-xs border-t border-slate-100 pt-4">Charak Hospital ED • Resuscitation Roles</div>
+                    </div>
+
+                    <!-- SLIDE 10: Capnography & ETCO2 Diagnostic Targets -->
+                    <div class="slide-frame bg-slate-50 p-12 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 border-l-4 border-medical-600 pl-4 mb-6">
+                                <h2 class="text-3xl font-display font-bold text-slate-900">Capnography &amp; ETCO2 Tracking</h2>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
+                                <div class="space-y-4">
+                                    <h3 class="text-xl font-display font-bold text-slate-800">End-Tidal CO2 (ETCO2) Monitoring</h3>
+                                    <p class="text-slate-600 text-xs leading-relaxed">
+                                        Waveform capnography is the gold standard in the ED to monitor the effectiveness of chest compressions and confirm advanced airway placement.
+                                    </p>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="bg-white p-3.5 rounded-lg border border-slate-200">
+                                            <span class="text-xs font-bold text-medical-600 block mb-1">Low ETCO2 (&lt; 10 mmHg)</span>
+                                            <p class="text-[10px] text-slate-500">Indicates poor chest compression quality. Re-evaluate compressor's depth, posture, or speed immediately.</p>
+                                        </div>
+                                        <div class="bg-white p-3.5 rounded-lg border border-slate-200">
+                                            <span class="text-xs font-bold text-medical-600 block mb-1">Spike in ETCO2 (&gt; 35 mmHg)</span>
+                                            <p class="text-[10px] text-slate-500">A sudden, sustained spike indicates **Return of Spontaneous Circulation (ROSC)**.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-rose-50/50 p-6 rounded-xl border border-rose-100 flex flex-col justify-center">
+                                    <h4 class="font-bold text-rose-950 mb-2"><i class="fa-solid fa-chart-line text-medical-600 mr-2"></i>Capnography Waveforms</h4>
+                                    <p class="text-slate-600 text-xs leading-relaxed mb-4">
+                                        Continuous monitor tracking tells the resuscitation team whether they are successfully circulating blood. Do not perform pulse checks unless ETCO2 trends or ECG waveform changes indicate ROSC.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-slate-400 text-xs border-t border-slate-100 pt-4">Charak Hospital ED • Capnography</div>
+                    </div>
+
+                    <!-- SLIDE 11: Mechanics of CPR in ED Mattress Context -->
+                    <div class="slide-frame bg-slate-50 p-12 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 border-l-4 border-medical-600 pl-4 mb-6">
+                                <h2 class="text-3xl font-display font-bold text-slate-900">Mechanics of High-Quality Resuscitation</h2>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
+                                <div class="space-y-4">
+                                    <h3 class="text-xl font-display font-bold text-slate-800">Advanced Manual Blood Pump</h3>
+                                    <p class="text-slate-600 text-xs leading-relaxed">
+                                        Resuscitation requires proper technique to maintain perfusion pressure in a clinical bed setting.
+                                    </p>
+                                    <div class="bg-white border border-slate-200 p-4 rounded-xl flex items-center gap-4">
+                                        <div class="text-3xl text-medical-600"><i class="fa-solid fa-chair"></i></div>
+                                        <div>
+                                            <h4 class="font-bold text-slate-900 text-xs">Utilize Step Stools</h4>
+                                            <p class="text-[10px] text-slate-500">Keep standard medical step stools next to all resuscitation beds to ensure correct vertical posture.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-slate-900 text-slate-300 p-6 rounded-xl border border-slate-800 text-xs flex flex-col justify-center">
+                                    <h4 class="font-display font-bold text-white mb-2">Resuscitation Checklist</h4>
+                                    <ul class="text-xs space-y-2">
+                                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-medical-500"></i> Place patient flat on a backboard</li>
+                                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-medical-500"></i> Position shoulders directly over the patient's sternum</li>
+                                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-medical-500"></i> Swap compressors every 2 minutes (5 cycles) to prevent fatigue</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-slate-400 text-xs border-t border-slate-100 pt-4">Charak Hospital ED • Manual Resuscitation</div>
+                    </div>
+
+                    <!-- SLIDE 12: Proper Posture SVG (Bed & Stool) -->
+                    <div class="slide-frame bg-slate-50 p-12 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 border-l-4 border-medical-600 pl-4 mb-6">
+                                <h2 class="text-3xl font-display font-bold text-slate-900">Resuscitation Posture in the ED</h2>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center mt-4">
+                                <div class="space-y-4">
+                                    <h3 class="text-xl font-display font-bold text-slate-800">Vertical Alignment &amp; Gravity Leverage</h3>
+                                    <p class="text-slate-600 text-xs leading-relaxed">
+                                        For nursing staff, performing compressions on elevated ED beds is exhausting. Standing on a step stool allows you to use your upper body weight, preserving your stamina and ensuring consistent chest depth.
+                                    </p>
+                                    <div class="bg-medical-50 p-4 rounded-xl border border-medical-100 text-xs text-medical-900 flex items-center gap-3">
+                                        <i class="fa-solid fa-triangle-exclamation text-base"></i>
+                                        <span>Inadequate compression depth fails to empty cardiac ventricles. Always use a step stool for optimal force delivery.</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-center">
+                                    <!-- Posture Illustration SVG -->
+                                    <svg class="w-full max-w-[280px]" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="200" height="200" rx="16" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2" />
+                                        <rect x="25" y="115" width="150" height="15" fill="#94a3b8" />
+                                        <line x1="100" y1="50" x2="100" y2="115" stroke="#f43f5e" stroke-width="4" stroke-dasharray="6 4" />
+                                        <circle cx="100" cy="40" r="14" fill="#cbd5e1" stroke="#475569" stroke-width="3" />
+                                        <rect x="80" y="140" width="40" height="20" fill="#475569" rx="2" />
+                                        <text x="100" y="180" fill="#e11d48" font-size="9" font-family="Inter" font-weight="bold" text-anchor="middle">STOOL &amp; VERTICAL ALIGNMENT</text>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-slate-400 text-xs border-t border-slate-100 pt-4">Charak Hospital ED • Posture Mechanics</div>
+                    </div>
+
+                    <!-- SLIDE 13: Compression Dynamics & Metronome (110 BPM) -->
+                    <div class="slide-frame bg-slate-50 p-12 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 border-l-4 border-medical-600 pl-4 mb-6">
+                                <h2 class="text-3xl font-display font-bold text-slate-900">Compression Depth, Rate &amp; Metronome</h2>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center mt-4">
+                                <div class="space-y-4">
+                                    <h3 class="text-xl font-display font-bold text-slate-800">Critical Clinical Metrics</h3>
+                                    <div class="space-y-3.5">
+                                        <div class="flex items-start gap-3">
+                                            <div class="h-8 w-8 rounded-full bg-medical-50 text-medical-600 flex items-center justify-center shrink-0 font-bold text-xs">1</div>
+                                            <div>
+                                                <h4 class="font-bold text-slate-900 text-xs">Target Depth: 2.0 to 2.4 inches (5–6 cm)</h4>
+                                                <p class="text-[10px] text-slate-500">Ensure the chest fully recoils between compressions. Leaning on the chest blocks venous return and coronary perfusion.</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-start gap-3">
+                                            <div class="h-8 w-8 rounded-full bg-medical-50 text-medical-600 flex items-center justify-center shrink-0 font-bold text-xs">2</div>
+                                            <div>
+                                                <h4 class="font-bold text-slate-900 text-xs">Target Rate: 100 to 120 compressions per minute</h4>
+                                                <p class="text-[10px] text-slate-500">Consistent, fast compressions are needed to maintain cerebral oxygenation.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-slate-900 text-white p-6 rounded-xl border border-slate-800 flex flex-col items-center justify-center relative overflow-hidden">
+                                    <div class="text-center z-10">
+                                        <span class="text-slate-400 text-[9px] uppercase tracking-widest block mb-1">AHA Practice Metronome</span>
+                                        <div class="text-3xl font-display font-extrabold text-medical-400" id="metronomeBpm">110 BPM</div>
+                                        
+                                        <div class="relative h-20 w-20 mx-auto my-4 flex items-center justify-center">
+                                            <div class="absolute inset-0 rounded-full border border-medical-500/50 hidden" id="pulseRing"></div>
+                                            <div class="h-12 w-12 rounded-full bg-medical-600 flex items-center justify-center text-white text-lg font-bold shadow-lg" id="pulseCenter">
+                                                <i class="fa-solid fa-heartbeat"></i>
+                                            </div>
+                                        </div>
+
+                                        <button onclick="toggleMetronome()" id="metronomeBtn" class="bg-medical-600 hover:bg-medical-700 text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors focus:outline-none">
+                                            Start Metronome
+                                        </button>
+                                        <p class="text-[9px] text-slate-400 mt-2">Practice compression timing along with this beat.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-slate-400 text-xs border-t border-slate-100 pt-4">Charak Hospital ED • Target Metrics</div>
+                    </div>
+
+                    <!-- SLIDE 14: Airway Management (BVM, LMA, ET Tube Integration) -->
+                    <div class="slide-frame bg-slate-50 p-12 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 border-l-4 border-medical-600 pl-4 mb-6">
+                                <h2 class="text-3xl font-display font-bold text-slate-900">Professional Airway Management</h2>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center mt-4">
+                                <div class="space-y-4">
+                                    <h3 class="text-xl font-display font-bold text-slate-800">Oxygenation &amp; Advanced Devices</h3>
+                                    <p class="text-slate-600 text-xs leading-relaxed">
+                                        For ED patients, airway management escalates rapidly from simple bag-valve-mask (BVM) ventilation to advanced airway placement.
+                                    </p>
+                                    <div class="bg-white p-4 rounded-xl border border-slate-200">
+                                        <h4 class="font-bold text-slate-900 text-xs mb-1.5"><i class="fa-solid fa-head-side-mask text-medical-600 mr-2"></i>Double C-E Technique for BVM</h4>
+                                        <p class="text-slate-500 text-[10px] leading-relaxed">
+                                            Use a two-provider BVM technique: one provider uses both hands to seal the mask (forming 'C' and 'E' shapes), while the other squeezes the bag. This ensures an optimal seal and prevents gastric inflation.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="space-y-4">
+                                    <div class="bg-white p-4 rounded-xl border border-slate-200">
+                                        <h4 class="font-bold text-slate-900 text-xs mb-1.5"><i class="fa-solid fa-hospital-user text-medical-600 mr-2"></i>Advanced Airway Ventilation Rate</h4>
+                                        <p class="text-slate-500 text-[10px] leading-relaxed">
+                                            Once an endotracheal tube or supraglottic device (such as an LMA) is placed, do not stop compressions. Deliver **1 breath every 6 seconds (10 breaths per minute)** continuously.
+                                        </p>
+                                    </div>
+                                    <div class="bg-rose-50 p-4 rounded-xl border border-rose-100 text-[10px] text-rose-950">
+                                        <strong class="font-bold"><i class="fa-solid fa-triangle-exclamation mr-1.5"></i>Over-Ventilation Warning:</strong> Excessive ventilation increases pressure in the chest, reducing venous blood return to the heart. Keep breaths controlled and brief (1 second).
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-slate-400 text-xs border-t border-slate-100 pt-4">Charak Hospital ED • Airway Protocols</div>
+                    </div>
+
+                    <!-- SLIDE 15: CPR Cycles (30:2 vs. Continuous with Advanced Airway) -->
+                    <div class="slide-frame bg-slate-50 p-12 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 border-l-4 border-medical-600 pl-4 mb-6">
+                                <h2 class="text-3xl font-display font-bold text-slate-900">CPR Cycles: BLS vs. Advanced Airway</h2>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center mt-4">
+                                <div class="space-y-4">
+                                    <h3 class="text-xl font-display font-bold text-slate-800">Resuscitation Coordination</h3>
+                                    <p class="text-slate-600 text-xs leading-relaxed">
+                                        The resuscitation cycle is determined by whether an advanced airway is in place. Minimizing pauses remains the top clinical priority.
+                                    </p>
+                                    <div class="bg-white p-4 rounded-xl border border-slate-200 flex items-center justify-between">
+                                        <div class="text-center w-1/2">
+                                            <span class="text-3xl font-display font-extrabold text-medical-600 block">30 : 2</span>
+                                            <span class="text-[10px] text-slate-500 font-bold">Standard BLS Cycle</span>
+                                            <p class="text-[9px] text-slate-400 mt-1">Squeeze BVM during brief pauses after 30 compressions.</p>
+                                        </div>
+                                        <div class="h-10 w-[2px] bg-slate-200"></div>
+                                        <div class="text-center w-1/2">
+                                            <span class="text-3xl font-display font-extrabold text-sky-600 block">10 / Min</span>
+                                            <span class="text-[10px] text-slate-500 font-bold">Continuous Compressions</span>
+                                            <p class="text-[9px] text-slate-400 mt-1">Uninterrupted chest compressions with asynchronous ventilations.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-slate-900 text-slate-300 p-6 rounded-xl border border-slate-800 text-xs space-y-3">
+                                    <h4 class="font-display font-bold text-white text-xs">When to Check Rhythms:</h4>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-circle-exclamation text-medical-500"></i> Every 2 minutes (or after 5 cycles of 30:2)</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-circle-exclamation text-medical-500"></i> Limit rhythm checks to under 10 seconds</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-circle-exclamation text-medical-500"></i> Pre-charge the defibrillator during compressions to minimize delay</li>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-slate-400 text-xs border-t border-slate-100 pt-4">Charak Hospital ED • Resuscitation Cycles</div>
+                    </div>
+
+                    <!-- SLIDE 16: Crash Cart & Manual Defibrillation -->
+                    <div class="slide-frame bg-slate-50 p-12 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 border-l-4 border-medical-600 pl-4 mb-6">
+                                <h2 class="text-3xl font-display font-bold text-slate-900">Crash Cart &amp; Manual Defibrillation</h2>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
+                                <div class="space-y-4">
+                                    <h3 class="text-xl font-display font-bold text-slate-800">Advanced Energy Delivery</h3>
+                                    <p class="text-slate-600 text-xs leading-relaxed">
+                                        Unlike public-access AEDs, ED nursing staff operate manual biphasic/monophasic defibrillators. This allows for immediate energy customization and synchronized cardioversion.
+                                    </p>
+                                    <div class="bg-white p-4 rounded-xl border border-slate-200">
+                                        <h4 class="font-bold text-slate-900 text-xs mb-1"><i class="fa-solid fa-bolt text-medical-600 mr-2"></i>Biphasic Defibrillation Energy</h4>
+                                        <p class="text-[10px] text-slate-500">Initial dose: **120J to 200J** (depending on manufacturer). If unknown, charge to maximum energy (**200J**).</p>
+                                    </div>
+                                </div>
+                                <div class="bg-rose-50 p-6 rounded-xl border border-rose-100 flex flex-col justify-center">
+                                    <h4 class="font-bold text-rose-950 mb-2"><i class="fa-solid fa-circle-exclamation text-medical-500 mr-2"></i>Monophasic Defibrillation</h4>
+                                    <p class="text-slate-600 text-xs leading-relaxed">
+                                        If your emergency cart uses an older monophasic defibrillator, deliver shocks at **360J** for all attempts.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-slate-400 text-xs border-t border-slate-100 pt-4">Charak Hospital ED • Crash Cart Setup</div>
+                    </div>
+
+                    <!-- SLIDE 17: Pediatric & Infant ED Resuscitation (PALS) Cover -->
+                    <div class="slide-frame bg-slate-950 flex flex-col justify-between p-12 text-white">
+                        <div class="flex justify-between items-start">
+                            <span class="text-xs font-semibold uppercase tracking-widest text-medical-500 bg-medical-950/40 px-3 py-1.5 rounded-full border border-medical-900/50">ED Advanced Cardiac Care</span>
+                            <span class="text-xs text-slate-400">Section 2: Pediatrics</span>
+                        </div>
+                        <div class="my-auto max-w-3xl">
+                            <span class="text-medical-500 font-display font-semibold text-lg uppercase tracking-wide block mb-3">Pediatric Advanced Life Support (PALS)</span>
+                            <h1 class="text-4xl font-display font-extrabold text-white tracking-tight leading-tight mb-6">
+                                Pediatric &amp; Infant Resuscitation<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-medical-500 to-rose-400">Clinical Resuscitation Protocols</span>
+                            </h1>
+                            <p class="text-slate-400 text-sm leading-relaxed max-w-2xl">
+                                Adapting physical compression techniques, medication dosing, airway sizes, and team-based ratios for fragile pediatric patients in the emergency department.
+                            </p>
+                        </div>
+                        <div class="text-slate-500 text-xs border-t border-slate-900 pt-4">Charak Hospital ED • Geetanjali Mishra</div>
+                    </div>
+
+                    <!-- SLIDE 18: Child-Specific Clinical Actions in ED -->
+                    <div class="slide-frame bg-slate-50 p-12 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 border-l-4 border-medical-600 pl-4 mb-6">
+                                <h2 class="text-3xl font-display font-bold text-slate-900">Child Advanced Care (1 Year to Puberty)</h2>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
+                                <div class="space-y-4">
+                                    <h3 class="text-xl font-display font-bold text-slate-800">Mechanics for Children</h3>
+                                    <p class="text-slate-600 text-xs leading-relaxed">
+                                        Children have highly compliant chest cages. The compression technique must be scaled to prevent structural injury while maintaining cardiac output.
+                                    </p>
+                                    <div class="bg-white p-4 rounded-xl border border-slate-200 text-xs space-y-2.5">
+                                        <div class="flex items-center gap-2"><i class="fa-solid fa-hand text-medical-500"></i> <strong class="text-slate-950 font-semibold">1 or 2 Hands:</strong> Use 1 hand for smaller children, and 2 hands for older, larger pediatric patients.</div>
+                                        <div class="flex items-center gap-2"><i class="fa-solid fa-arrows-down-to-line text-medical-500"></i> <strong class="text-slate-950 font-semibold">Depth Limit:</strong> Press down approximately 2 inches (5 cm).</div>
+                                    </div>
+                                </div>
+                                <div class="bg-slate-900 text-slate-300 p-6 rounded-xl border border-slate-800 text-xs flex flex-col justify-center">
+                                    <h4 class="font-display font-bold text-white text-xs mb-3">Two-Rescuer Healthcare Ratio:</h4>
+                                    <p class="mb-3 leading-relaxed">
+                                        Unlike the default bystander 30:2 ratio, clinical teams in the ED must use a specialized ratio:
+                                    </p>
+                                    <div class="bg-slate-800 p-3 rounded-lg border border-slate-700">
+                                        <span class="text-medical-400 font-bold block">2-Provider Team Ratio:</span>
+                                        <span class="text-white text-lg font-bold font-display">15 : 2 Cycle</span>
+                                        <p class="text-[10px] text-slate-400 mt-1">15 compressions followed by 2 breaths to optimize oxygenation and prevent hypoxemic arrest.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-slate-400 text-xs border-t border-slate-100 pt-4">Charak Hospital ED • Pediatric Care</div>
+                    </div>
+
+                    <!-- SLIDE 19: Infant Advanced Resuscitation & SVG (2 Thumb-Encircling Hands) -->
+                    <div class="slide-frame bg-slate-50 p-12 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 border-l-4 border-medical-600 pl-4 mb-6">
+                                <h2 class="text-3xl font-display font-bold text-slate-900">Infant Advanced Resuscitation (Under 1 Year)</h2>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center mt-4">
+                                <div class="space-y-4">
+                                    <h3 class="text-xl font-display font-bold text-slate-800">Two Thumb-Encircling Hands Technique</h3>
+                                    <p class="text-slate-600 text-xs leading-relaxed">
+                                        For two-rescuer healthcare teams, the two-thumb technique is preferred. This method provides more consistent depth and higher coronary perfusion pressure compared to the two-finger technique.
+                                    </p>
+                                    <div class="bg-white p-4 rounded-xl border border-slate-200 text-xs space-y-2.5">
+                                        <div class="flex items-center gap-2"><i class="fa-solid fa-compress-arrows-alt text-medical-500"></i> <strong class="text-slate-950 font-semibold">PALS Target Depth:</strong> Press down 1.5 inches (4 cm).</div>
+                                        <div class="flex items-center gap-2"><i class="fa-solid fa-hospital-user text-medical-500"></i> <strong class="text-slate-950 font-semibold">Pulse Check Location:</strong> Check the brachial artery inside the upper arm.</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-center">
+                                    <!-- Two-Thumb Technique SVG -->
+                                    <svg class="w-full max-w-[280px]" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="200" height="200" rx="16" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2" />
+                                        <path d="M70 55 C 70 70, 60 85, 60 140 H140 C 140 85, 130 70, 130 55 Z" fill="#e2e8f0" stroke="#94a3b8" stroke-width="3" />
+                                        <circle cx="100" cy="40" r="18" fill="#cbd5e1" stroke="#94a3b8" stroke-width="3" />
+                                        <path d="M 100 80 Q 90 90 95 105" stroke="#e11d48" stroke-width="4" />
+                                        <path d="M 100 80 Q 110 90 105 105" stroke="#e11d48" stroke-width="4" />
+                                        <circle cx="100" cy="80" r="8" fill="#e11d48" />
+                                        <text x="100" y="165" fill="#e11d48" font-size="9" font-family="Inter" font-weight="bold" text-anchor="middle">TWO THUMB-ENCIRCLING HANDS</text>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-slate-400 text-xs border-t border-slate-100 pt-4">Charak Hospital ED • Infant Care</div>
+                    </div>
+
+                    <!-- SLIDE 20: ED Resuscitation Matrix -->
+                    <div class="slide-frame bg-slate-50 p-12 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 border-l-4 border-medical-600 pl-4 mb-6">
+                                <h2 class="text-3xl font-display font-bold text-slate-900">Clinical Resuscitation Matrix</h2>
+                            </div>
+                            <div class="overflow-x-auto mt-6">
+                                <table class="w-full text-left border-collapse bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden text-xs">
+                                    <thead>
+                                        <tr class="bg-slate-900 text-white font-display">
+                                            <th class="p-4 font-semibold">Patient Category</th>
+                                            <th class="p-4 font-semibold">Target Depth</th>
+                                            <th class="p-4 font-semibold">Compression Method (2-Provider)</th>
+                                            <th class="p-4 font-semibold">Ratio (2-Provider Team)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="border-b border-slate-100">
+                                            <td class="p-4 font-bold text-slate-950">Adult (Post-Puberty)</td>
+                                            <td class="p-4 text-slate-600">2.0 – 2.4" (5 – 6 cm)</td>
+                                            <td class="p-4 text-slate-600">2 hands (interlocked) on lower sternum</td>
+                                            <td class="p-4 text-slate-600">30:2 (BLS) / Continuous if tubed</td>
+                                        </tr>
+                                        <tr class="border-b border-slate-100 bg-slate-50/50">
+                                            <td class="p-4 font-bold text-slate-950">Child (1 Yr - Puberty)</td>
+                                            <td class="p-4 text-slate-600">About 2.0" (5 cm)</td>
+                                            <td class="p-4 text-slate-600">1 or 2 hands on lower sternum</td>
+                                            <td class="p-4 text-slate-600">15:2 (PALS Team Ratio)</td>
+                                        </tr>
+                                        <tr class="border-b border-slate-100">
+                                            <td class="p-4 font-bold text-slate-950">Infant (&lt; 1 Year)</td>
+                                            <td class="p-4 text-slate-600">About 1.5" (4 cm)</td>
+                                            <td class="p-4 text-slate-600">2-thumb encircling hands preferred</td>
+                                            <td class="p-4 text-slate-600">15:2 (PALS Team Ratio)</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="text-slate-400 text-xs border-t border-slate-100 pt-4">Charak Hospital ED • Clinical Summary</div>
+                    </div>
+
+                    <!-- SLIDE 21: Pharmacotherapy: Dose, Frequency & Flush -->
+                    <div class="slide-frame bg-slate-50 p-12 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 border-l-4 border-medical-600 pl-4 mb-6">
+                                <h2 class="text-3xl font-display font-bold text-slate-900">Advanced Cardiac Pharmacotherapy</h2>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
+                                <div class="space-y-4">
+                                    <h3 class="text-xl font-display font-bold text-slate-800">Code Medication Management</h3>
+                                    <p class="text-slate-600 text-xs leading-relaxed">
+                                        For ED nurses, preparing and administering drugs during a Code Blue must follow a strict, systematic schedule.
+                                    </p>
+                                    <div class="bg-white p-4 rounded-xl border border-slate-200">
+                                        <h4 class="font-bold text-slate-900 text-xs mb-1"><i class="fa-solid fa-syringe text-medical-600 mr-2"></i>Epinephrine Admin Protocol</h4>
+                                        <p class="text-slate-500 text-[10px]">Dose: **1mg (1:10,000 solution) IV/IO every 3 to 5 minutes**. Follow each dose with a **20 mL saline flush** and elevate the extremity to ensure rapid drug entry.</p>
+                                    </div>
+                                </div>
+                                <div class="space-y-4">
+                                    <div class="bg-white p-4 rounded-xl border border-slate-200">
+                                        <h4 class="font-bold text-slate-900 text-xs mb-1"><i class="fa-solid fa-capsules text-medical-600 mr-2"></i>Amiodarone (Shockable Rhythms Only)</h4>
+                                        <p class="text-slate-500 text-[10px]">Indication: Refractory VF/pVT after the 3rd shock. Initial dose: **300mg IV/IO bolus**. A second dose of **150mg** can be given after the 5th shock if the rhythm persists.</p>
+                                    </div>
+                                    <div class="bg-rose-50 p-4 rounded-xl border border-rose-100 text-[10px] text-rose-950">
+                                        <strong class="font-bold">Lidocaine Alternative:</strong> If Amiodarone is unavailable, administer Lidocaine: initial dose **1 to 1.5 mg/kg IV/IO**, followed by **0.5 to 0.75 mg/kg** for subsequent doses.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-slate-400 text-xs border-t border-slate-100 pt-4">Charak Hospital ED • Pharmacotherapy</div>
+                    </div>
+
+                    <!-- SLIDE 22: Reversible Causes: 5 H's and 5 T's -->
+                    <div class="slide-frame bg-slate-50 p-12 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 border-l-4 border-medical-600 pl-4 mb-6">
+                                <h2 class="text-3xl font-display font-bold text-slate-900">Identifying Reversible Causes: 5 H's &amp; 5 T's</h2>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                                <div class="bg-rose-50/40 p-5 rounded-xl border border-rose-100">
+                                    <h3 class="text-sm font-display font-bold text-rose-950 mb-3 uppercase tracking-wide">The 5 H's</h3>
+                                    <ul class="text-[10px] space-y-1.5 text-slate-700">
+                                        <li>**1. Hypovolemia:** (Administer rapid IV fluids or blood products)</li>
+                                        <li>**2. Hypoxia:** (Optimize ventilation and confirm airway oxygen supply)</li>
+                                        <li>**3. Hydrogen Ion (Acidosis):** (Improve ventilation; consider Sodium Bicarb)</li>
+                                        <li>**4. Hypo / Hyperkalemia:** (Check lab results; manage potassium levels)</li>
+                                        <li>**5. Hypothermia:** (Deploy active rewarming blankets)</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-sky-50/40 p-5 rounded-xl border border-sky-100">
+                                    <h3 class="text-sm font-display font-bold text-sky-950 mb-3 uppercase tracking-wide">The 5 T's</h3>
+                                    <ul class="text-[10px] space-y-1.5 text-slate-700">
+                                        <li>**1. Tension Pneumothorax:** (Assist with needle decompression)</li>
+                                        <li>**2. Tamponade (Cardiac):** (Prepare for emergency pericardiocentesis)</li>
+                                        <li>**3. Toxins (Drug Overdose):** (Administer targeted reversal agents/antidotes)</li>
+                                        <li>**4. Thrombosis (Pulmonary):** (Consider emergency fibrinolytic therapy)</li>
+                                        <li>**5. Thrombosis (Coronary):** (Prepare for immediate transfer to Cath Lab)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-slate-400 text-xs border-t border-slate-100 pt-4">Charak Hospital ED • Reversible Causes</div>
+                    </div>
+
+                    <!-- SLIDE 23: Defibrillation Procedure & "Clear" Call Visuals -->
+                    <div class="slide-frame bg-slate-50 p-12 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 border-l-4 border-medical-600 pl-4 mb-6">
+                                <h2 class="text-3xl font-display font-bold text-slate-900">Manual Defibrillation Procedure</h2>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center mt-4">
+                                <div class="space-y-4">
+                                    <h3 class="text-xl font-display font-bold text-slate-800">Defibrillation Checklist</h3>
+                                    <p class="text-slate-600 text-xs leading-relaxed">
+                                        Defibrillation must follow a highly structured, strict safety protocol.
+                                    </p>
+                                    <div class="space-y-3.5 text-[10px]">
+                                        <div class="flex items-start gap-2.5">
+                                            <span class="font-bold text-white bg-medical-600 h-5 w-5 rounded-full flex items-center justify-center shrink-0">1</span>
+                                            <div>
+                                                <strong class="text-slate-950 block font-semibold">Charge Defibrillator:</strong>
+                                                <span class="text-slate-500">Charge the device *while* chest compressions are ongoing to minimize pauses.</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-start gap-2.5">
+                                            <span class="font-bold text-white bg-medical-600 h-5 w-5 rounded-full flex items-center justify-center shrink-0">2</span>
+                                            <div>
+                                                <strong class="text-slate-950 block font-semibold">Visual Safety Check:</strong>
+                                                <span class="text-slate-500">Check the patient and bed. Confirm that the oxygen supply is directed away from the bed. Loudly call: **"All Clear!"**</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-center">
+                                    <!-- Defib Pads SVG -->
+                                    <svg class="w-full max-w-[280px]" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="200" height="200" rx="16" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2" />
+                                        <path d="M60 40 C 60 70, 40 100, 40 160 H160 C 160 100, 140 70, 140 40 Z" fill="#e2e8f0" stroke="#94a3b8" stroke-width="3" />
+                                        <rect x="70" y="55" width="22" height="15" rx="3" fill="#cbd5e1" stroke="#3b82f6" stroke-width="2" />
+                                        <rect x="115" y="110" width="22" height="15" rx="3" fill="#cbd5e1" stroke="#3b82f6" stroke-width="2" />
+                                        <text x="100" y="165" fill="#3b82f6" font-size="9" font-family="Inter" font-weight="bold" text-anchor="middle">DEFIB PAD PLACEMENT</text>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-slate-400 text-xs border-t border-slate-100 pt-4">Charak Hospital ED • Defibrillation</div>
+                    </div>
+
+                    <!-- SLIDE 24: Code Scribe & Event Documentation -->
+                    <div class="slide-frame bg-slate-50 p-12 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 border-l-4 border-medical-600 pl-4 mb-6">
+                                <h2 class="text-3xl font-display font-bold text-slate-900">Code Documentation &amp; the Scribe Role</h2>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
+                                <div class="space-y-4">
+                                    <h3 class="text-xl font-display font-bold text-slate-800">Accurate Time Tracking</h3>
+                                    <p class="text-slate-600 text-xs leading-relaxed">
+                                        The Code Scribe plays a critical role in tracking the timeline of the resuscitation. This ensures that interventions are delivered on time and provides an accurate record for post-code evaluation.
+                                    </p>
+                                    <div class="bg-white p-4 rounded-xl border border-slate-200 text-xs space-y-2">
+                                        <p>**1. Epi Timer:** Track the exact time of epinephrine doses. Prompt the team leader at the 3-minute mark: *"Geetanjali, 3 minutes have passed since the last Epinephrine dose."*</p>
+                                        <p>**2. Defib Logger:** Record the exact energy level of each shock (e.g., 200J) and the patient's resulting cardiac rhythm.</p>
+                                    </div>
+                                </div>
+                                <div class="bg-slate-900 text-slate-300 p-6 rounded-xl border border-slate-800 text-xs flex flex-col justify-center">
+                                    <h4 class="font-display font-bold text-white text-xs mb-3">Critical Information to Document:</h4>
+                                    <ul class="space-y-1.5 text-[10px]">
+                                        <li><i class="fa-solid fa-clock text-medical-400 mr-2"></i> Time CPR was initiated</li>
+                                        <li><i class="fa-solid fa-clock text-medical-400 mr-2"></i> Time and results of all rhythm checks</li>
+                                        <li><i class="fa-solid fa-clock text-medical-400 mr-2"></i> ETCO2 levels at 2-minute intervals</li>
+                                        <li><i class="fa-solid fa-clock text-medical-400 mr-2"></i> Advanced airway confirmation times</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-slate-400 text-xs border-t border-slate-100 pt-4">Charak Hospital ED • Code Documentation</div>
+                    </div>
+
+                    <!-- SLIDE 25: Post-Resuscitation Care (ROSC Protocol) -->
+                    <div class="slide-frame bg-slate-50 p-12 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 border-l-4 border-medical-600 pl-4 mb-6">
+                                <h2 class="text-3xl font-display font-bold text-slate-900">Post-Cardiac Arrest Care (ROSC)</h2>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
+                                <div class="space-y-4">
+                                    <h3 class="text-xl font-display font-bold text-slate-800">Critical Nursing Priorities</h3>
+                                    <p class="text-slate-600 text-xs leading-relaxed">
+                                        Once ROSC is achieved, the patient remains highly unstable. Immediate, structured post-arrest care is needed to protect cerebral function.
+                                    </p>
+                                    <div class="bg-white p-4 rounded-xl border border-slate-200 text-xs space-y-2">
+                                        <p>**1. Airway &amp; Oxygenation:** Maintain oxygen saturation between **92% and 98%**. Avoid hyperoxia, which can worsen reperfusion injury.</p>
+                                        <p>**2. Hemodynamic Targets:** Maintain a **Systolic Blood Pressure &gt; 90 mmHg** and a **Mean Arterial Pressure (MAP) &gt; 65 mmHg**. Prepare vasopressor infusions as ordered.</p>
+                                    </div>
+                                </div>
+                                <div class="bg-slate-900 text-slate-300 p-6 rounded-xl border border-slate-800 text-xs flex flex-col justify-center">
+                                    <h4 class="font-display font-bold text-white text-xs mb-3">Targeted Temperature Management:</h4>
+                                    <p class="text-[10px] leading-relaxed mb-2">
+                                        For patients who remain unresponsive after ROSC, assist with initiating **Targeted Temperature Management (TTM)**.
+                                    </p>
+                                    <div class="bg-slate-800 p-3 rounded-lg border border-slate-700 text-[10px]">
+                                        <span class="text-medical-400 font-bold block">Cooling Parameters:</span>
+                                        Target temperature: **32°C to 36°C** maintained for at least **24 hours** to protect brain tissue.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-slate-400 text-xs border-t border-slate-100 pt-4">Charak Hospital ED • ROSC Protocols</div>
+                    </div>
+
+                    <!-- SLIDE 26: Team Debriefing & Resiliency -->
+                    <div class="slide-frame bg-slate-50 p-12 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 border-l-4 border-medical-600 pl-4 mb-6">
+                                <h2 class="text-3xl font-display font-bold text-slate-900">Post-Code Debriefing &amp; Quality Control</h2>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
+                                <div class="space-y-4">
+                                    <h3 class="text-xl font-display font-bold text-slate-800">The Power of the Hot Debrief</h3>
+                                    <p class="text-slate-600 text-xs leading-relaxed">
+                                        A short, structured debrief immediately following a resuscitation event is key to maintaining team performance and emotional wellness in the ED.
+                                    </p>
+                                    <div class="bg-white p-4 rounded-xl border border-slate-200 text-xs space-y-2.5">
+                                        <div class="flex items-center gap-2"><i class="fa-solid fa-hand-holding-medical text-medical-500"></i> <strong class="text-slate-950 font-semibold">Analyze Performance:</strong> What went well? Were compression pauses minimized?</div>
+                                        <div class="flex items-center gap-2"><i class="fa-solid fa-bullseye text-medical-500"></i> <strong class="text-slate-950 font-semibold">Identify Gaps:</strong> Was closed-loop communication maintained? Did we prepare drugs on time?</div>
+                                    </div>
+                                </div>
+                                <div class="bg-slate-900 text-slate-300 p-6 rounded-xl border border-slate-800 text-xs flex flex-col justify-center">
+                                    <h4 class="font-display font-bold text-white text-xs mb-3">Emotional Support:</h4>
+                                    <p class="text-[10px] leading-relaxed">
+                                        Resuscitation events are high-stress and emotionally demanding. As your Nursing Incharge, I am committed to supporting our team. Use debriefings to share concerns and support one another.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-slate-400 text-xs border-t border-slate-100 pt-4">Charak Hospital ED • Team Debriefing</div>
+                    </div>
+
+                    <!-- SLIDE 27: Training Summary and Competency (Dark Theme) -->
+                    <div class="slide-frame bg-slate-950 flex flex-col justify-between p-12 text-white relative">
+                        <div class="absolute inset-0 opacity-10 pointer-events-none">
+                            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="100%" height="100%" fill="url(#grid)" />
+                            </svg>
+                        </div>
+                        
+                        <div class="flex justify-between items-start">
+                            <span class="text-xs font-semibold uppercase tracking-widest text-medical-500 bg-medical-950/40 px-3 py-1.5 rounded-full border border-medical-900/50">Charak Hospital &amp; Research Center</span>
+                            <span class="text-xs text-slate-400">Class Concluded</span>
+                        </div>
+
+                        <div class="my-auto text-center max-w-2xl mx-auto">
+                            <h1 class="text-4xl font-display font-extrabold text-white tracking-tight leading-tight mb-4">
+                                Clinical Resuscitation Mastery
+                            </h1>
+                            <p class="text-slate-400 text-sm leading-relaxed mb-8">
+                                Thank you for your commitment to excellence. Your skills and rapid action are key to saving lives in our emergency department.
+                            </p>
+                            <div class="h-[2px] w-24 bg-medical-600 mx-auto mb-8"></div>
+                            <span class="text-slate-300 font-display font-semibold block text-base">Nursing Incharge: Geetanjali Mishra</span>
+                            <span class="text-slate-500 text-xs">Emergency Department Education Lead</span>
+                        </div>
+
+                        <div class="text-center text-slate-600 text-[10px]">
+                            © 2026 Charak Hospital &amp; Research Center. All Clinical Rights Reserved.
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Slide Progress Indicators Overlay -->
+                <div class="absolute top-1/2 left-4 -translate-y-1/2 flex flex-col gap-2 z-10" id="progressDots"></div>
+
+                <!-- Overlay Presenter Notes Drawer -->
+                <div class="absolute bottom-16 left-6 right-6 bg-slate-900/95 text-slate-200 border border-slate-800 rounded-xl p-5 shadow-2xl z-20 backdrop-blur-md hidden" id="presenterNotesDrawer">
+                    <div class="flex justify-between items-center mb-3 border-b border-slate-800 pb-2">
+                        <span class="text-xs font-bold text-medical-400 font-display uppercase tracking-widest flex items-center gap-1.5">
+                            <i class="fa-solid fa-clipboard-question"></i> Clinical Presenter Notes
+                        </span>
+                        <button onclick="togglePresenterNotes()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <p class="text-xs leading-relaxed italic text-slate-300" id="presenterNoteContent">
+                        Loading clinical notes...
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- BOTTOM PRESENTATION UTILITIES & CONTROLS -->
+    <footer class="bg-slate-900 border-t border-slate-800 px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-4 z-10">
+        <!-- Pagination Metadata -->
+        <div class="flex items-center gap-4">
+            <span class="text-slate-400 text-sm font-semibold font-display" id="slideIndexDisplay">Slide 1 of 27</span>
+            <div class="w-32 bg-slate-800 h-2 rounded-full overflow-hidden">
+                <div class="bg-medical-600 h-full w-1/12 transition-all duration-300" id="slideProgressBar"></div>
+            </div>
+        </div>
+
+        <!-- Dynamic Slide Selection Navigation Dropdown -->
+        <div class="flex items-center gap-3">
+            <select id="slideSelector" onchange="jumpToSelectedSlide()" class="bg-slate-800 text-slate-200 border border-slate-700 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:border-medical-500">
+                <!-- Dropdown items will be auto-generated by JS -->
+            </select>
+            <button onclick="toggleFullscreen()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white p-2 rounded-lg text-xs transition-colors" title="Toggle Fullscreen">
+                <i class="fa-solid fa-expand"></i>
+            </button>
+        </div>
+
+        <!-- Action Controls -->
+        <div class="flex gap-2">
+            <button onclick="prevSlide()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors">
+                <i class="fa-solid fa-arrow-left"></i> Previous
+            </button>
+            <button onclick="nextSlide()" class="bg-medical-600 hover:bg-medical-700 text-white px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors shadow-lg shadow-medical-500/20">
+                Next <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </footer>
+
+    <!-- CORE JS INTERACTIVES -->
+    <script>
+        // Total slides cataloged
+        const TOTAL_SLIDES = 27;
+        let currentSlide = 0;
+
+        // Metronome configuration logic
+        let metronomeInterval = null;
+        let metronomeActive = false;
+        const bpm = 110;
+        const intervalMs = (60 / bpm) * 1000;
+
+        let isPseudoFullscreen = false;
+        const slidePresenterNotes = {
+            0: "Set a professional, collaborative tone. Introduce yourself as Geetanjali Mishra, ED Nursing Incharge. Highlight the goal of this session: to build confidence and coordination among our nursing staff.",
+            1: "Explain that as ED nurses, we are the front line of resuscitation. Remind the team that our focus is on closed-loop communication and rapid, coordinated action.",
+            2: "Review the three main training goals: mastering team dynamics, coordinating rapid drug preparation, and using capnography for advanced diagnostics.",
+            3: "Focus on rhythm identification. Ensure all staff can instantly recognize shockable (VF/pVT) vs. non-shockable (Asystole/PEA) rhythms on the ED monitor.",
+            4: "Review the physiology of Coronary Perfusion Pressure (CPP). Emphasize that it takes 10 to 15 continuous compressions to build a protective CPP.",
+            5: "Explain the In-Hospital Chain of Survival (IHCA). Contrast this with the out-of-hospital chain, focusing on early surveillance and monitoring.",
+            6: "Discuss ED bed preparation. Emphasize that we must always use the rigid backboard and lower the bed to ensure proper compression mechanics.",
+            7: "Review clinical patient assessment. Remind staff not to spend more than 10 seconds checking a pulse or breathing before starting compressions.",
+            8: "Discuss role assignment. Emphasize the importance of clear, closed-loop communication to prevent confusion during a Code Blue.",
+            9: "Explain capnography tracking. Emphasize that ETCO2 waveform monitoring is the gold standard for tracking CPR quality in our department.",
+            10: "Review the mechanics of chest compressions in an ED bed. Remind staff to use step stools to maintain correct posture.",
+            11: "Discuss vertical posture and leverage. Remind staff that using your body weight saves energy and ensures consistent compression depth.",
+            12: "Review target metrics: a depth of 2.0 to 2.4 inches and a rate of 100 to 120 compressions per minute. Emphasize allowing full chest recoil.",
+            13: "Discuss professional airway management. Emphasize the two-provider BVM technique and the continuous ventilation rate once an advanced airway is in place.",
+            14: "Review the compression-to-ventilation cycle. Contrast the standard BLS cycle with the continuous compression protocol used with advanced airways.",
+            15: "Discuss the manual defibrillator. Highlight biphasic energy settings (120J to 200J) and the importance of pre-charging during compressions.",
+            16: "Transition to Pediatric Advanced Life Support (PALS). Emphasize that pediatric arrests are typically respiratory in origin.",
+            17: "Review child CPR mechanics. Highlight using 1 or 2 hands and the two-provider clinical ratio of 15:2.",
+            18: "Discuss infant CPR. Emphasize the two thumb-encircling hands technique for clinical teams and the target depth of 1.5 inches.",
+            19: "Review the comparative resuscitation matrix. Ensure all staff are familiar with the differences in adult, child, and infant protocols.",
+            20: "Discuss ED pharmacotherapy. Emphasize Epinephrine dosing intervals (3–5 minutes), the 20 mL saline flush, and Amiodarone guidelines.",
+            21: "Review reversible causes. Emphasize the importance of scanning for the 5 H's and 5 T's during a resuscitation event.",
+            22: "Explain the manual defibrillation safety check. Emphasize that chest compressions should continue while the device charges.",
+            23: "Discuss the Code Scribe role. Highlight the importance of tracking drug intervals, rhythm checks, and ETCO2 trends.",
+            24: "Review post-cardiac arrest care. Focus on airway oxygenation targets, hemodynamic optimization, and Targeted Temperature Management.",
+            25: "Emphasize post-code debriefing. Explain how short, structured 'hot debriefs' help improve performance and support team resiliency.",
+            26: "Conclude the session. Highlight upcoming competency assessments and thank the team for their commitment to excellence."
+        };
+
+        // Initialize presentation configuration on load
+        window.onload = function() {
+            buildSlideDropdown();
+            buildProgressDots();
+            updateSlideView();
+
+            // Support keyboard navigation controls
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'ArrowRight' || event.key === 'Space') {
+                    nextSlide();
+                } else if (event.key === 'ArrowLeft') {
+                    prevSlide();
+                }
+            });
+        };
+
+        // Generate slide selection selector option items
+        function buildSlideDropdown() {
+            const selector = document.getElementById('slideSelector');
+            selector.innerHTML = '';
+            for (let i = 0; i < TOTAL_SLIDES; i++) {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.innerText = `Slide ${i + 1}: ${getSlideName(i)}`;
+                selector.appendChild(opt);
+            }
+        }
+
+        // Return slide topic titles for selector menu
+        function getSlideName(index) {
+            const names = [
+                "Title Slide", "ED Clinical message", "Nursing Objectives", "Monitor Rhythms", 
+                "Physiological CPP", "In-Hospital Chain", "Bed Prep & Scene", "Clinical Assessment", 
+                "Code Blue Roles", "Capnography & ETCO2", "Manual Resuscitation", "Posture & Alignment", 
+                "Compression Metrics", "Advanced Airway", "CPR Cycles Protocol", "Manual Defibrillation", 
+                "PALS Cover Slide", "Child Advanced Care", "Infant Techniques", "Resuscitation Matrix", 
+                "Pharmacotherapy", "The 5 H's & 5 T's", "Manual Defib Check", "Code Documentation", 
+                "Post-Arrest ROSC", "Post-Code Debriefing", "Closing Summary"
+            ];
+            return names[index] || `Slide ${index + 1}`;
+        }
+
+        // Generate lateral navigation indicator dots
+        function buildProgressDots() {
+            const container = document.getElementById('progressDots');
+            container.innerHTML = '';
+            for (let i = 0; i < TOTAL_SLIDES; i++) {
+                const dot = document.createElement('button');
+                dot.className = `h-3 w-3 rounded-full border border-slate-300 transition-all duration-300 ${i === 0 ? 'bg-medical-600 w-5 border-medical-600' : 'bg-white hover:bg-slate-200'}`;
+                dot.onclick = () => {
+                    currentSlide = i;
+                    updateSlideView();
+                };
+                container.appendChild(dot);
+            }
+        }
+
+        // Action: Navigate next slide
+        function nextSlide() {
+            if (currentSlide < TOTAL_SLIDES - 1) {
+                currentSlide++;
+                updateSlideView();
+            }
+        }
+
+        // Action: Navigate previous slide
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlideView();
+            }
+        }
+
+        // Jump directly to selection index
+        function jumpToSelectedSlide() {
+            const selectVal = document.getElementById('slideSelector').value;
+            currentSlide = parseInt(selectVal);
+            updateSlideView();
+        }
+
+        // Redraw and scroll slide view track position
+        function updateSlideView() {
+            const track = document.getElementById('slideTrack');
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+            // Adjust navigation indicators
+            document.getElementById('slideIndexDisplay').innerText = `Slide ${currentSlide + 1} of ${TOTAL_SLIDES}`;
+            document.getElementById('slideProgressBar').style.width = `${((currentSlide + 1) / TOTAL_SLIDES) * 100}%`;
+            document.getElementById('slideSelector').value = currentSlide;
+
+            // Highlight progress dots
+            const dots = document.getElementById('progressDots').children;
+            for (let i = 0; i < dots.length; i++) {
+                if (i === currentSlide) {
+                    dots[i].className = "h-3 w-5 rounded-full bg-medical-600 border border-medical-600 transition-all duration-300";
+                } else {
+                    dots[i].className = "h-3 w-3 rounded-full bg-white border border-slate-300 hover:bg-slate-200 transition-all duration-300";
+                }
+            }
+
+            // Sync notes text to active slide
+            document.getElementById('presenterNoteContent').innerText = slidePresenterNotes[currentSlide] || "No clinical teaching notes available for this slide.";
+        }
+
+        // Toggle notes modal display
+        function togglePresenterNotes() {
+            const drawer = document.getElementById('presenterNotesDrawer');
+            drawer.classList.toggle('hidden');
+        }
+
+        // Fullscreen mode configuration with permission policy safe-guards
+        function toggleFullscreen() {
+            const container = document.getElementById('presentationContainer');
+            
+            // 1. If currently in native fullscreen, exit it
+            if (document.fullscreenElement) {
+                document.exitFullscreen().catch(err => console.warn(err));
+                return;
+            }
+
+            // 2. If currently in custom pseudo-fullscreen, exit it
+            if (isPseudoFullscreen) {
+                exitPseudoFullscreen();
+                return;
+            }
+
+            // 3. Try entering native browser fullscreen
+            container.requestFullscreen()
+                .then(() => {
+                    // Succeeded natively
+                })
+                .catch(err => {
+                    // Blocked/Disallowed by iframe permissions policy -> Fall back gracefully to internal pseudo-fullscreen
+                    console.warn("Native fullscreen blocked by permissions policy. Triggering smooth pseudo-fullscreen fallback.", err);
+                    enterPseudoFullscreen();
+                });
+        }
+
+        function enterPseudoFullscreen() {
+            const container = document.getElementById('presentationContainer');
+            container.classList.add('pseudo-fullscreen');
+            isPseudoFullscreen = true;
+            
+            const icon = document.querySelector('[title="Toggle Fullscreen"] i');
+            if (icon) {
+                icon.className = "fa-solid fa-compress";
+            }
+        }
+
+        function exitPseudoFullscreen() {
+            const container = document.getElementById('presentationContainer');
+            container.classList.remove('pseudo-fullscreen');
+            isPseudoFullscreen = false;
+            
+            const icon = document.querySelector('[title="Toggle Fullscreen"] i');
+            if (icon) {
+                icon.className = "fa-solid fa-expand";
+            }
+        }
+
+        // Listen for standard escape key to quit our custom pseudo-fullscreen state
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && isPseudoFullscreen) {
+                exitPseudoFullscreen();
+            }
+        });
+
+        // Listen for native fullscreen changes to keep visual interface icons in sync
+        document.addEventListener('fullscreenchange', () => {
+            const icon = document.querySelector('[title="Toggle Fullscreen"] i');
+            if (icon) {
+                if (document.fullscreenElement) {
+                    icon.className = "fa-solid fa-compress";
+                } else {
+                    icon.className = "fa-solid fa-expand";
+                }
+            }
+        });
+
+        // Audio-Visual CPR rhythm metronome code
+        function toggleMetronome() {
+            const btn = document.getElementById('metronomeBtn');
+            const pulseRing = document.getElementById('pulseRing');
+            const pulseCenter = document.getElementById('pulseCenter');
+
+            if (!metronomeActive) {
+                // Activate the cycle
+                metronomeActive = true;
+                btn.innerText = "Stop Metronome";
+                btn.className = "bg-rose-700 hover:bg-rose-800 text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors focus:outline-none";
+                pulseRing.classList.remove('hidden');
+
+                // Tone generation logic using built-in Web Audio API
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+                metronomeInterval = setInterval(() => {
+                    // Flash effect
+                    pulseRing.classList.remove('pulse-effect');
+                    void pulseRing.offsetWidth; // Force redraw/reflow
+                    pulseRing.classList.add('pulse-effect');
+
+                    pulseCenter.classList.add('scale-110');
+                    setTimeout(() => pulseCenter.classList.remove('scale-110'), 150);
+
+                    // Generate mechanical synth click
+                    if (audioCtx) {
+                        const osc = audioCtx.createOscillator();
+                        const gainNode = audioCtx.createGain();
+                        osc.connect(gainNode);
+                        gainNode.connect(audioCtx.destination);
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(800, audioCtx.currentTime); // Pitch
+                        gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08); // Sharp click decay
+                        osc.start();
+                        osc.stop(audioCtx.currentTime + 0.1);
+                    }
+                }, intervalMs);
+
+            } else {
+                // Terminate the cycle
+                metronomeActive = false;
+                btn.innerText = "Start Metronome";
+                btn.className = "bg-medical-600 hover:bg-medical-700 text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors focus:outline-none";
+                pulseRing.classList.add('hidden');
+                clearInterval(metronomeInterval);
+                metronomeInterval = null;
+            }
+        }
+    </script>
+</body>
+</html>
